@@ -50,9 +50,11 @@ export function buildEnvVars(env: MoltbotEnv): Record<string, string> {
   if (env.WORKER_URL) envVars.WORKER_URL = env.WORKER_URL;
   if (env.OPENAI_BASE_URL) envVars.OPENAI_BASE_URL = env.OPENAI_BASE_URL;
 
-  // Note: R2 credentials are no longer passed to the container.
-  // Persistence is handled by the Sandbox SDK's backup/restore API,
-  // which uses presigned URLs from the Worker side.
+  // R2 credentials for OpenClaw persistent storage (device tokens, conversations)
+  if (env.CLOUDFLARE_ACCOUNT_ID) envVars.CLOUDFLARE_ACCOUNT_ID = env.CLOUDFLARE_ACCOUNT_ID;
+  if (env.R2_ACCESS_KEY_ID) envVars.R2_ACCESS_KEY_ID = env.R2_ACCESS_KEY_ID;
+  if (env.R2_SECRET_ACCESS_KEY) envVars.R2_SECRET_ACCESS_KEY = env.R2_SECRET_ACCESS_KEY;
+  if (env.BACKUP_BUCKET_NAME) envVars.BACKUP_BUCKET_NAME = env.BACKUP_BUCKET_NAME;
 
   return envVars;
 }
