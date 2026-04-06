@@ -98,6 +98,16 @@ if (process.env.OPENCLAW_DEV_MODE === 'true') {
     config.gateway.controlUi.allowInsecureAuth = true;
 }
 
+// Allow the Worker's public URL as a trusted origin for the Control UI
+if (process.env.WORKER_URL) {
+    config.gateway.controlUi = config.gateway.controlUi || {};
+    config.gateway.controlUi.allowedOrigins = [process.env.WORKER_URL];
+} else {
+    // Fallback: use Host-header origin (safe behind Cloudflare Worker proxy)
+    config.gateway.controlUi = config.gateway.controlUi || {};
+    config.gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback = true;
+}
+
 // Legacy AI Gateway base URL override:
 // ANTHROPIC_BASE_URL is picked up natively by the Anthropic SDK,
 // so we don't need to patch the provider config. Writing a provider
